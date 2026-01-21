@@ -26,6 +26,11 @@ class _NewsPageState extends State<NewsPage> {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
+    setState(() {
+      articles.clear();
+      page = 1;
+    });
+    _getData();
     _refreshController.refreshCompleted();
   }
 
@@ -34,15 +39,21 @@ class _NewsPageState extends State<NewsPage> {
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     //items.add((items.length + 1).toString());
-    if (mounted)
-      setState(() {
-        ++page;
-      });
-    _getData();
-    _refreshController.loadComplete();
+    if (page < (totalResult / pageSize).ceil()) {
+      if (mounted)
+        setState(() {
+          ++page;
+        });
+      _getData();
+      _refreshController.loadComplete();
+    } else {
+      _refreshController.loadNoData();
+      _refreshController.resetNoData();
+    }
   }
 
   void _getData() async {
+    page == 1 ? isLoading = true : isLoading = false;
     var url = Uri.parse(
       'https://newsapi.org/v2/top-headlines?country=us&apiKey=ab0d4aca4cea481e8157d31c68eb2b23&page=$page&pageSize=$pageSize',
     );
@@ -52,7 +63,8 @@ class _NewsPageState extends State<NewsPage> {
       Map<String, dynamic> news = convert.jsonDecode(response.body);
       setState(() {
         totalResult = news['totalResults'];
-        articles = news['articles'];
+        //articles = news['articles'];
+        articles.addAll(news['articles']);
         //room = hotel ?? [];
         isLoading = false;
       });
@@ -82,7 +94,7 @@ class _NewsPageState extends State<NewsPage> {
           : SmartRefresher(
               enablePullDown: true,
               enablePullUp: true,
-              header: WaterDropHeader(),
+              header: ClassicHeader(),
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus? mode) {
                   Widget body;
@@ -133,7 +145,7 @@ class _NewsPageState extends State<NewsPage> {
                                           fit: BoxFit.cover,
                                         )
                                       : Image.asset(
-                                          'assets/no_image.png',
+                                          'assets/images/no_pic.png',
                                           fit: BoxFit.cover,
                                         ),
                                 ),

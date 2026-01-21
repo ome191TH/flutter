@@ -3,6 +3,7 @@
 //import 'package:ftapp/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ftapp/pages/NewsStack.dart';
+import 'package:ftapp/pages/RegisterPage.dart';
 import 'package:ftapp/pages/home_stack.dart';
 import 'package:ftapp/pages/product_stack.dart';
 
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
       //home: const HomePage(),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) => const HomeStack(),
+        '/': (BuildContext context) => const RegisterPage(),
+        '/home': (BuildContext context) => const HomeStack(),
         '/product': (BuildContext context) => const ProductStack(),
         '/newsstack': (BuildContext context) => const NewsStack(),
         //'/': (BuildContext context) =>  const HomePage(),
