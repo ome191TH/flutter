@@ -168,8 +168,8 @@ class _HomepageState extends State<Homepage> {
                         context,
                         'homestack/about',
                         arguments: <String, String>{
-                          'name': 'Thammasit',
-                          'surname': 'Kreekaew',
+                          'name': 'Suttikan',
+                          'surname': 'Srimara',
                         },
                       );
                       if (returnData != null) setState(() => data = returnData);
@@ -419,8 +419,8 @@ class _HomepageState extends State<Homepage> {
                         context,
                         'homestack/about',
                         arguments: <String, String>{
-                          'name': ' Thammasit',
-                          'surname': 'Kreekaew',
+                          'name': ' Suttikan',
+                          'surname': 'Srimara',
                         },
                       );
                       setState(() {
