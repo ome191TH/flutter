@@ -1,6 +1,9 @@
+import 'package:bwnp/pages/detail_page.dart';
 import 'package:flutter/material.dart';
-import 'package:ftapp/pages/detail_page.dart';
-import 'package:ftapp/pages/product_page.dart';
+// import 'package:metmet/pages/detail_page.dart';
+// import 'package:metmet/pages/product_page.dart';
+
+import 'product_page.dart';
 
 class ProductStack extends StatefulWidget {
   const ProductStack({super.key});

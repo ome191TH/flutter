@@ -1,26 +1,29 @@
+
+import 'package:bwnp/pages/webview_page.dart';
 import 'package:flutter/material.dart';
-import 'package:bwnp/pages/NewsPage.dart';
-import 'package:bwnp/pages/WebViewPage.dart';
+
+// import 'package:metmet/pages/detail_page.dart';
+// import 'package:metmet/pages/product_page.dart';
 
 class NewsStack extends StatefulWidget {
   const NewsStack({super.key});
 
   @override
-  State<NewsStack> createState() => _NewsStackState();
+  State<NewsStack> createState() => NewsStackState();
 }
 
-class _NewsStackState extends State<NewsStack> {
+class NewsStackState extends State<NewsStack> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      initialRoute: 'newsstack/news',
+      initialRoute: 'Newsstack/news',
       onGenerateRoute: (RouteSettings settings) {
         WidgetBuilder builder;
         switch (settings.name) {
-          case 'newsstack/news':
-            builder = (BuildContext context) => const NewsPage();
+          case 'Newsstack/news':
+            builder = (BuildContext context) => const NewsStack();
             break;
-          case 'newsstack/webview':
+          case 'Newsstack/webview':
             builder = (BuildContext context) => const WebViewPage();
             break;
           default:

@@ -1,9 +1,11 @@
+
+import 'package:bwnp/pages/CompanyPage.dart';
+import 'package:bwnp/pages/UpdateProfilePage.dart';
+import 'package:bwnp/pages/about_page.dart';
+import 'package:bwnp/pages/contact_page.dart';
+import 'package:bwnp/pages/home_page.dart';
+import 'package:bwnp/pages/room_page.dart';
 import 'package:flutter/material.dart';
-import 'package:ftapp/pages/CompanyPage.dart';
-import 'package:ftapp/pages/RoomPage.dart';
-import 'package:ftapp/pages/about_page.dart';
-import 'package:ftapp/pages/contact_page.dart';
-import 'package:ftapp/pages/home_page.dart';
 
 class HomeStack extends StatefulWidget {
   const HomeStack({super.key});
@@ -21,7 +23,7 @@ class _HomeStackState extends State<HomeStack> {
         WidgetBuilder builder;
         switch (settings.name) {
           case 'homestack/home':
-            builder = (BuildContext context) => const HomePage();
+            builder = (BuildContext context) => const Homepage();
             break;
           case 'homestack/about':
             builder = (BuildContext context) => const AboutPage();
@@ -29,14 +31,16 @@ class _HomeStackState extends State<HomeStack> {
           case 'homestack/contact':
             builder = (BuildContext context) => const ContactPage();
             break;
-
           case 'homestack/company':
-            builder = (BuildContext context) => const Companypage();
+            builder = (BuildContext context) => const CompanyPage();
             break;
-
           case 'homestack/room':
             builder = (BuildContext context) => const Roompage();
             break;
+          case 'homestack/updateprofile':
+            builder = (BuildContext context) => const UpdateProfilePage();
+            break;
+
           default:
             throw Exception('Invalid route: ${settings.name}');
         }

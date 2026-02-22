@@ -1,34 +1,108 @@
+
+import 'package:bwnp/pages/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:another_flushbar/flushbar.dart';
 
-class Registerpage extends StatefulWidget {
-  const Registerpage({super.key});
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<Registerpage> createState() => _RegisterpageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterpageState extends State<Registerpage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool statusRedEye = true;
+
+  Future<void> _register(Map<String, dynamic> values) async {
+    try {
+      var url = Uri.https('api.codingthailand.com', '/api/register');
+      var response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: convert.jsonEncode({
+          "name": values['name'],
+          "email": values['email'],
+          "password": values['password'],
+          "dob": values['dob'].toString().substring(0, 10),
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        var res = convert.jsonDecode(response.body);
+        Flushbar(
+          title: "สำเร็จ",
+          message: res['message'] ?? "สมัครสมาชิกเรียบร้อยแล้ว",
+          duration: Duration(seconds: 2), // ลดเวลาให้แสดงแค่ 2 วินาที
+          backgroundColor: Colors.green,
+          flushbarPosition: FlushbarPosition.BOTTOM,
+        ).show(context);
+
+        // หน่วงเวลา 2 วินาทีก่อนย้ายไปหน้า Login
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => loginpage()),
+          );
+        });
+      } else {
+        var res = convert.jsonDecode(response.body);
+        Flushbar(
+          title: "ผิดพลาด",
+          message: res['message'] ?? "เกิดข้อผิดพลาดในการสมัคร",
+          duration: Duration(seconds: 3),
+          backgroundColor: const Color.fromARGB(255, 255, 17, 0),
+          flushbarPosition: FlushbarPosition.BOTTOM,
+        ).show(context);
+      }
+    } catch (e) {
+      Flushbar(
+        title: "Exception",
+        message: e.toString(),
+        duration: Duration(seconds: 3),
+        backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+        flushbarPosition: FlushbarPosition.BOTTOM,
+      ).show(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register Page')),
+      appBar: AppBar(
+        title: Text('Register Page'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // กดแล้วไป Login โดยตรง
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => loginpage()),
+            );
+          },
+        ),
+      ),
       body: Container(
         alignment: Alignment.topCenter,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue[50]!, Colors.blue[700]!],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              const Color.fromARGB(255, 0, 25, 148)!,
+              const Color.fromARGB(255, 84, 124, 255)!,
+            ],
           ),
         ),
         child: SingleChildScrollView(
           child: Container(
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.all(16),
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(16),
             child: Column(
               children: <Widget>[
                 FormBuilder(
@@ -39,8 +113,9 @@ class _RegisterpageState extends State<Registerpage> {
                       buildInputName(),
                       buildInputEmail(),
                       buildInputPassword(),
-                      buildInputBirthday(),
+                      buildInputBirthdate(),
                       SizedBox(height: 20),
+                      buildBtnRegister(),
                     ],
                   ),
                 ),
@@ -56,21 +131,23 @@ class _RegisterpageState extends State<Registerpage> {
     return FormBuilderTextField(
       name: 'name',
       maxLines: 1,
-      keyboardType: TextInputType.text,
-      style: const TextStyle(fontSize: 20),
-      decoration: const InputDecoration(
+      keyboardType: TextInputType.name,
+      style: TextStyle(fontSize: 20),
+      decoration: InputDecoration(
         prefixIcon: Icon(Icons.person),
-        labelText: 'name',
+        labelText: 'Name',
         labelStyle: TextStyle(color: Colors.black, fontSize: 20),
         fillColor: Colors.white,
         filled: true,
-        errorStyle: TextStyle(color: Colors.red, fontSize: 20),
+        errorStyle: TextStyle(color: const Color.fromARGB(255, 255, 17, 0), fontSize: 20),
       ),
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: 'กรุณาป้อนชื่อ-นามสกุล'),
+        FormBuilderValidators.required(
+          errorText: 'Please enter your full name.',
+        ),
         FormBuilderValidators.minLength(
           3,
-          errorText: "กรุณากรอกอย่างน้อย 3 ตัวอักษร",
+          errorText: 'Please enter at least 3 characters.',
         ),
       ]),
     );
@@ -81,19 +158,18 @@ class _RegisterpageState extends State<Registerpage> {
       name: 'email',
       maxLines: 1,
       keyboardType: TextInputType.emailAddress,
-      style: const TextStyle(fontSize: 20),
-      decoration: const InputDecoration(
-        hintText: 'Email',
+      style: TextStyle(fontSize: 20),
+      decoration: InputDecoration(
         prefixIcon: Icon(Icons.email),
         labelText: 'Email',
         labelStyle: TextStyle(color: Colors.black, fontSize: 20),
         fillColor: Colors.white,
         filled: true,
-        errorStyle: TextStyle(color: Colors.red, fontSize: 20),
+        errorStyle: TextStyle(color: const Color.fromARGB(255, 255, 17, 0), fontSize: 20),
       ),
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: 'กรุณากรอกE-mail'),
-        FormBuilderValidators.email(errorText: "รูปแบบE-mailไม่ถูกต้อง"),
+        FormBuilderValidators.required(errorText: 'Invalid email address.'),
+        FormBuilderValidators.email(errorText: 'Invalid email format.'),
       ]),
     );
   }
@@ -103,15 +179,12 @@ class _RegisterpageState extends State<Registerpage> {
       name: 'password',
       maxLines: 1,
       keyboardType: TextInputType.text,
-      style: const TextStyle(fontSize: 20),
+      style: TextStyle(fontSize: 20),
       obscureText: statusRedEye,
       decoration: InputDecoration(
-        hintText: 'password',
-        prefixIcon: const Icon(Icons.vpn_key),
+        prefixIcon: Icon(Icons.vpn_key),
         suffixIcon: IconButton(
-          icon: Icon(
-            statusRedEye ? Icons.remove_red_eye : Icons.visibility_off,
-          ),
+          icon: Icon(statusRedEye ? Icons.visibility_off : Icons.visibility),
           onPressed: () {
             setState(() {
               statusRedEye = !statusRedEye;
@@ -119,59 +192,75 @@ class _RegisterpageState extends State<Registerpage> {
           },
         ),
         labelText: 'Password',
-        labelStyle: const TextStyle(color: Colors.black, fontSize: 20),
+        labelStyle: TextStyle(color: Colors.black, fontSize: 20),
         fillColor: Colors.white,
         filled: true,
-        errorStyle: const TextStyle(color: Colors.red, fontSize: 20),
+        errorStyle: TextStyle(color: const Color.fromARGB(255, 255, 17, 0), fontSize: 20),
       ),
       validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: 'กรุณากรอกPassword'),
+        FormBuilderValidators.required(errorText: 'Password is required.'),
         FormBuilderValidators.minLength(
           4,
-          errorText: "กรุณากรอกอย่างน้อย 4 ตัวอักษร",
+          errorText: 'Please enter at least 6 characters.',
         ),
       ]),
     );
   }
-}
 
-Widget buildInputBirthday() {
-  return FormBuilderDateTimePicker(
-    name: 'dob',
-    maxLines: 1,
-    inputType: InputType.date,
-    decoration: const InputDecoration(
-      prefixIcon: Icon(Icons.cake),
-      labelText: 'วัน/เดือน/ปี เกิด',
-      labelStyle: TextStyle(color: Colors.black, fontSize: 20),
-      fillColor: Colors.white,
-      filled: true,
-      errorStyle: TextStyle(color: Colors.red, fontSize: 20),
-    ),
-  );
-}
+  Widget buildInputBirthdate() {
+    return FormBuilderDateTimePicker(
+      name: 'dob',
+      inputType: InputType.date,
+      format: DateFormat('dd/MM/yyyy'),
+      decoration: InputDecoration(
+        labelText: 'วัน/เดือน/ปี เกิด',
+        prefixIcon: Icon(Icons.cake),
+        labelStyle: TextStyle(color: Colors.black, fontSize: 20),
+        fillColor: Colors.white,
+        filled: true,
+        errorStyle: TextStyle(color: const Color.fromARGB(255, 255, 21, 5), fontSize: 20),
+      ),
+      style: TextStyle(fontSize: 20),
+      validator: FormBuilderValidators.required(
+        errorText: 'Date of birth is required.',
+      ),
+    );
+  }
 
-/*Widget buildBtnRegister() {
-  return Row(
-    children: <Widget>[
-      Expanded(
-        child: MaterialButton(
-          color: Theme.of(context).accentColor,
-          child: Text(
-            "Submit",
-            style: TextStyle(color: Colors.white),
+  Widget buildBtnRegister() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                "Register",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              onPressed: () {
+                if (_formKey.currentState?.saveAndValidate() ?? false) {
+                  _register(_formKey.currentState!.value);
+                } else {
+                  Flushbar(
+                    title: "ข้อมูลไม่ครบ",
+                    message: "กรุณากรอกข้อมูลให้ครบถ้วน",
+                    duration: Duration(seconds: 3),
+                    backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+                    flushbarPosition: FlushbarPosition.BOTTOM,
+                  ).show(context);
+                }
+              },
+            ),
           ),
-          onPressed: (){
-            _formKey.currentState?.save();
-            if (_formKey.currentState!.validate()) {
-              print(_formKey.currentState?.value);
-            } else {
-              print("validation failed");
-            }
-          }
         ),
-      )
-    ],
-  )
+      ],
+    );
+  }
 }
-*/

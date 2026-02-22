@@ -12,26 +12,29 @@ class _ContactPageState extends State<ContactPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ติดต่อเรา'),
-        automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: const Text('ติดต่อเรา'),
+          automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-           const Text('ติดต่อเรา'),
+            const Text('ติดต่อเรา'),
             ElevatedButton(
-              onPressed: (){
-                Navigator.pop(context);
-            }, 
-            child: Text("กลับหน้าเกี่ยวกับเรา")
+              onPressed: () {
+                Navigator.pop(context,);
+
+              }, 
+              child: Text('กลับหน้าเกี่ยวกับเรา')
             ),
-             ElevatedButton(
-              onPressed: (){
+            ElevatedButton(
+              onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(context, 'homestack/home', (route) => false);
-            }, 
-            child: Text("กลับหน้าหลัก")
+
+              }, 
+              child: Text('กลับหน้าหลัก')
             ),
           ],
         ),

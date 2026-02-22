@@ -1,28 +1,25 @@
 class Hotel {
-  List<Room>? room;
+  List<Room>? data;
 
-  Hotel({this.room});
+  Hotel({this.data});
 
-  Hotel.fromJson(List<dynamic> json) {
-    if (json != null) {
-      room = <Room>[];
-      json.forEach((v) {
-        room!.add(new Room.fromJson(v));
+  Hotel.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = <Room>[];
+      json['data'].forEach((v) {
+        data!.add(Room.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.room != null) {
-      data['data'] = this.room!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> json = <String, dynamic>{};
+    if (data != null) {
+      json['data'] = data!.map((v) => v.toJson()).toList();
     }
-    return data;
+    return json;
   }
 }
-
-
-
 
 class Room {
   String? id;
@@ -32,16 +29,12 @@ class Room {
   Room({this.id, this.name, this.status});
 
   Room.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id']?.toString();
     name = json['name'];
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['status'] = this.status;
-    return data;
+    return {'id': id, 'name': name, 'status': status};
   }
 }

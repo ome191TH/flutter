@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -11,18 +10,17 @@ class Footer extends StatefulWidget {
 class _FooterState extends State<Footer> {
   String companyName = 'RMUTP';
 
-  void _changeCompanyName(){
+  void _changecompanyName() {
     setState(() {
-      companyName = 'Bus RMUTP';
+      companyName = 'BUS RMUTP';
     });
   }
 
   @override
   void initState() {
     super.initState();
-    if (kDebugMode) {
-      print('init state');
-    }
+    // ignore: avoid_print
+    print('init state');
   }
 
   @override
@@ -31,9 +29,9 @@ class _FooterState extends State<Footer> {
       children: <Widget>[
         Text(companyName),
         ElevatedButton(
-          onPressed: _changeCompanyName, 
-          child: const Text('Click Me!!!')
-        )
+          onPressed: _changecompanyName,
+          child: Text('Click Me!!!'),
+        ),
       ],
     );
   }

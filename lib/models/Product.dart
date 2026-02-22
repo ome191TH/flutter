@@ -1,26 +1,26 @@
 class Product {
-  List<Course>? course;
+  List<Course>? data;
   Meta? meta;
 
-  Product({this.course, this.meta});
+  Product({this.data, this.meta});
 
   Product.fromJson(Map<String, dynamic> json) {
-    if (json['Course'] != null) {
-      course = <Course>[];
-      json['Course'].forEach((v) {
-        course!.add(new Course.fromJson(v));
+    if (json['data'] != null) {
+      data = <Course>[];
+      json['data'].forEach((v) {
+        data!.add(Course.fromJson(v));
       });
     }
     meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.course != null) {
-      data['data'] = this.course!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => ()).toList();
     }
-    if (this.meta != null) {
-      data['meta'] = this.meta!.toJson();
+    if (meta != null) {
+      data['meta'] = meta!.toJson();
     }
     return data;
   }
@@ -46,13 +46,13 @@ class Course {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['detail'] = this.detail;
-    data['date'] = this.date;
-    data['view'] = this.view;
-    data['picture'] = this.picture;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['detail'] = detail;
+    data['date'] = date;
+    data['view'] = view;
+    data['picture'] = picture;
     return data;
   }
 }
@@ -69,9 +69,9 @@ class Meta {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['status_code'] = this.statusCode;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['status_code'] = statusCode;
     return data;
   }
 }

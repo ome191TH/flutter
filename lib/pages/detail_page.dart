@@ -17,7 +17,7 @@ class _DetailPageState extends State<DetailPage> {
   final numberFormat = NumberFormat('#,###');
 
   void _getData(int id) async {
-    var url = Uri.parse('https://api.codingthailand.com/api/course/$id');
+    var url = Uri.https('api.codingthailand.com', '/api/course/$id');
 
     var response = await http.get(url);
     if (response.statusCode == 200) {
@@ -27,7 +27,6 @@ class _DetailPageState extends State<DetailPage> {
         isLoading = false;
       });
     } else {
-      //error 400,500
       print('Request failed with status: ${response.statusCode}.');
     }
   }
@@ -41,16 +40,19 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    course = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    course = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    const chelseaBlue = Color.fromARGB(255, 207, 131, 17);
+
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(course['title']),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
+      appBar: AppBar(centerTitle: true, title: Text(course['title'] ?? '')),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.separated(
               itemCount: chapter.length,
               separatorBuilder: (BuildContext context, int index) =>
@@ -62,8 +64,12 @@ class _DetailPageState extends State<DetailPage> {
                   trailing: Chip(
                     label: Text(
                       '${numberFormat.format(chapter[index]['ch_view'])}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    backgroundColor: Colors.purpleAccent,
+                    backgroundColor: chelseaBlue,
                   ),
                 );
               },

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Companypage extends StatefulWidget {
-  const Companypage({super.key});
+class CompanyPage extends StatefulWidget {
+  const CompanyPage({super.key});
 
   @override
-  State<Companypage> createState() => _CompanypageState();
+  State<CompanyPage> createState() => _CompantPageState();
 }
 
-class _CompanypageState extends State<Companypage> {
+class _CompantPageState extends State<CompanyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,10 @@ class _CompanypageState extends State<Companypage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            builderHeader(),
+            Image(
+              image: AssetImage('assets/images/company.jpg'),
+              fit: BoxFit.cover,
+            ),
             SafeArea(
               child: Padding(
                 padding: EdgeInsets.all(10),
@@ -31,39 +34,49 @@ class _CompanypageState extends State<Companypage> {
                     ),
                     Divider(),
                     Text(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,',
+                      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here',
                     ),
                     Divider(),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.phone_iphone, size: 30),
+                        Icon(Icons.phone_iphone),
                         SizedBox(width: 20),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text('คณะบริหารธุรกิจ มทร.พระนคร'),
-                            Text('0-2665-3555 ต่อ 2101-3'),
+                            Text('คณะบริหารธุระกิจ มทร.พระนคร'),
+                            Text('0-2665-3555  ต่อ 2101-3'),
                           ],
                         ),
                       ],
                     ),
                     Divider(),
-                    builderWrap(),
+                    Wrap(
+                      spacing: 8,
+                      children: List.generate(
+                        7,
+                        (index) => Chip(
+                          label: Text('text ${index + 1}'),
+                          avatar: Icon(Icons.star),
+                          backgroundColor: Colors.purple[300],
+                        ),
+                      ),
+                    ),
                     Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/User.png'),
+                          backgroundImage: AssetImage('assets/images/user.png'),
                           radius: 40,
                         ),
                         CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/User.png'),
+                          backgroundImage: AssetImage('assets/images/user.png'),
                           radius: 40,
                         ),
                         CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/User.png'),
+                          backgroundImage: AssetImage('assets/images/user.png'),
                           radius: 40,
                         ),
                         SizedBox(
@@ -90,9 +103,9 @@ class _CompanypageState extends State<Companypage> {
   }
 }
 
-Image builderHeader() {
+Image buliderHeader() {
   return Image(
-    image: AssetImage('assets/images/company.png'),
+    image: AssetImage('assets/images/company.jpg'),
     fit: BoxFit.cover,
   );
 }
@@ -105,7 +118,7 @@ Wrap builderWrap() {
       (index) => Chip(
         label: Text('text ${index + 1}'),
         avatar: Icon(Icons.star),
-        backgroundColor: Colors.purple[300],
+        backgroundColor: Colors.purpleAccent,
       ),
     ),
   );

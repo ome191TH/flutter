@@ -1,15 +1,15 @@
+import 'package:bwnp/widgets/logo.dart';
+import 'package:bwnp/widgets/menu.dart';
 import 'package:flutter/material.dart';
-import 'package:ftapp/widgets/logo.dart';
-import 'package:ftapp/widgets/menu.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Homepage extends StatefulWidget {
+  const Homepage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Homepage> createState() => _HomepageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomepageState extends State<Homepage> {
   // ignore: prefer_typing_uninitialized_variables
   var returnData;
   Map<String, dynamic> data = {'page': '', 'msg': ''};
@@ -19,9 +19,9 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Logo(),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      drawer: const Menu(),
+      drawer: Menu(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,20 +29,22 @@ class _HomePageState extends State<HomePage> {
             const Text('You have pushed the button this many times:'),
             Text('Message is ${data['msg']} from ${data['page']}'),
             ElevatedButton(
-              onPressed: () async{
-                returnData = await Navigator.pushNamed(context, 'homestack/about', 
-                arguments: <String, String>{
-                  'name': 'Suttikan',
-                  'surname': 'Srimara'
-                }
+              onPressed: () async {
+                returnData = await Navigator.pushNamed(
+                  context,
+                  'homestack/about',
+                  arguments: <String, String>{
+                    'name': ' Thammasit',
+                    'surname': 'Kreekaew',
+                  },
                 );
                 setState(() {
                   if (returnData != null) {
                     data = returnData;
                   }
                 });
-            }, 
-            child: Text("เกี่ยวกับเรา")
+              },
+              child: const Text('เกี่ยวกับเรา'),
             ),
           ],
         ),

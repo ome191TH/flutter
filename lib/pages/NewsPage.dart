@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ftapp/widgets/menu.dart';
+import 'package:bwnp/widgets/menu.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -138,11 +138,16 @@ class _NewsPageState extends State<NewsPage> {
                               children: <Widget>[
                                 Positioned.fill(
                                   child: articles[index]['urlToImage'] != null
-                                      ? Ink.image(
-                                          image: NetworkImage(
-                                            articles[index]['urlToImage'],
-                                          ),
+                                      ? Image.network(
+                                          articles[index]['urlToImage'],
                                           fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                return Image.asset(
+                                                  'assets/images/no_pic.png',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              },
                                         )
                                       : Image.asset(
                                           'assets/images/no_pic.png',
